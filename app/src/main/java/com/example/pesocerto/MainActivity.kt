@@ -5,10 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,6 +74,7 @@ fun PreverPesoScreen() {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Icon(
             painter = painterResource(id = R.mipmap.frango), // seu PNG
             contentDescription = null,
@@ -89,39 +92,84 @@ fun PreverPesoScreen() {
 
         @Composable
         fun InputPeso(
-            label: String,
-            value: String,
-            imeAction: ImeAction = ImeAction.Next,
-            onValueChange: (String) -> Unit
+            label1: String,
+            value1: String,
+            label2: String,
+            value2: String,
+            imeAction1: ImeAction = ImeAction.Next,
+            imeAction2: ImeAction = ImeAction.Next,
+            onValueChange1: (String) -> Unit,
+            onValueChange2: (String) -> Unit
         ) {
-            OutlinedTextField(
-                value = value,
-                onValueChange = onValueChange,
-                label = { Text("🐥 $label") },
-                placeholder = { Text("ex: 1.320") },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = imeAction
-                ),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedBorderColor = Color.Black,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Gray
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp) // Espaço entre os campos
+            ) {
+                OutlinedTextField(
+                    value = value1,
+                    onValueChange = onValueChange1,
+                    label = { Text("🐥 $label1") },
+                    placeholder = { Text("ex: 1.320") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = imeAction1
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = Color.Black,
+                        focusedLabelColor = Color.Black,
+                        cursorColor = Color.Gray
+                    ),
+                    modifier = Modifier
+                        .weight(1f) // Divide espaço igualmente
+                        .padding(vertical = 6.dp)
+                )
+
+                OutlinedTextField(
+                    value = value2,
+                    onValueChange = onValueChange2,
+                    label = { Text("🐥 $label2") },
+                    placeholder = { Text("ex: 1.320") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = imeAction2
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = Color.Black,
+                        focusedLabelColor = Color.Black,
+                        cursorColor = Color.Gray
+                    ),
+                    modifier = Modifier
+                        .weight(1f) // Divide espaço igualmente
+                        .padding(vertical = 6.dp)
+                )
+            }
+
         }
 
-        InputPeso("Peso 1 dia", peso1) { peso1 = it }
-        InputPeso("Peso 7 dias", peso7) { peso7 = it }
-        InputPeso("Peso 14 dias", peso14) { peso14 = it }
-        InputPeso("Peso 21 dias", peso21) { peso21 = it }
-        InputPeso("Peso 28 dias", peso28) { peso28 = it }
-        InputPeso("Peso 35 dias", peso35, ImeAction.Done) { peso35 = it }
+        InputPeso(
+            label1 = "Peso 1 dia", value1 = peso1,
+            label2 = "Peso 7 dias", value2 = peso7,
+            onValueChange1 = { peso1 = it },
+            onValueChange2 = { peso7 = it }
+        )
+        InputPeso(
+            label1 = "Peso 14 dia", value1 = peso14,
+            label2 = "Peso 21 dias", value2 = peso21,
+            onValueChange1 = { peso14 = it },
+            onValueChange2 = { peso21 = it }
+        )
+
+        InputPeso(
+            label1 = "Peso 28 dia", value1 = peso28,
+            label2 = "Peso 35 dias", value2 = peso35,
+            onValueChange1 = { peso28 = it },
+            onValueChange2 = { peso35 = it },
+            imeAction2 = ImeAction.Done
+        )
 
         Button(
             onClick = {
