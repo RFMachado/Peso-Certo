@@ -6,11 +6,17 @@ import org.apache.commons.math3.fitting.WeightedObservedPoint
 import org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizer
 import kotlin.math.exp
 
-fun ajustarGompertz(tData: DoubleArray, yData: DoubleArray): DoubleArray? {
-    val pontos = tData.indices.map { i ->
-        WeightedObservedPoint(1.0, tData[i], yData[i])
+fun ajustarGompertz(tData: DoubleArray, yData: DoubleArray): Triple<Double, Double, Double>? {
+    // Normalização de tData
+    val tMin = tData.minOrNull() ?: return null
+    val tMax = tData.maxOrNull() ?: return null
+    val tNorm = tData.map { (it - tMin) / (tMax - tMin) }
+
+    val pontos = tNorm.indices.map { i ->
+        WeightedObservedPoint(1.0, tNorm[i], yData[i])
     }
 
+    // Função de Gompertz paramétrica
     val funcaoGompertz = object : ParametricUnivariateFunction {
         override fun value(t: Double, params: DoubleArray): Double {
             val (a, b, c) = params
@@ -22,19 +28,23 @@ fun ajustarGompertz(tData: DoubleArray, yData: DoubleArray): DoubleArray? {
             val expCT = exp(-c * t)
             val expBexpCT = exp(-b * expCT)
             val da = expBexpCT
-            val db = -a * expBexpCT * expCT
-            val dc = a * b * t * expBexpCT * expCT
+            val db = -a * expCT * expBexpCT
+            val dc = a * b * t * expCT * expCT * expBexpCT
             return doubleArrayOf(da, db, dc)
         }
     }
 
-    val initialGuess = doubleArrayOf(5.9183, 0.0476, 32.7461)
+    // Chute inicial adequado após testes
+    val initialGuess = doubleArrayOf(5.9, -0.5, 0.5)
+
     val fitter = CurveFitter<ParametricUnivariateFunction>(LevenbergMarquardtOptimizer())
     pontos.forEach { fitter.addObservedPoint(it) }
 
     return try {
-        fitter.fit(funcaoGompertz, initialGuess)
+        val result = fitter.fit(funcaoGompertz, initialGuess)
+        Triple(result[0], result[1], result[2]) // a, b, c
     } catch (e: Exception) {
+        e.printStackTrace()
         null
     }
 }
