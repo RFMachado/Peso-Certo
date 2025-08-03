@@ -35,7 +35,7 @@ fun ajustarGompertz(tData: DoubleArray, yData: DoubleArray): Triple<Double, Doub
     }
 
     // Chute inicial adequado após testes
-    val initialGuess = doubleArrayOf(5.9, -0.5, 0.5)
+    val initialGuess = doubleArrayOf(5.9183, -0.476, 0.962)
 
     val fitter = CurveFitter<ParametricUnivariateFunction>(LevenbergMarquardtOptimizer())
     pontos.forEach { fitter.addObservedPoint(it) }

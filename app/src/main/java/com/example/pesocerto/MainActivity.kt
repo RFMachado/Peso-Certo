@@ -61,15 +61,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PreverPesoScreen() {
-    var peso1 by remember { mutableStateOf("") }
-    var peso7 by remember { mutableStateOf("") }
-    var peso14 by remember { mutableStateOf("") }
-    var peso21 by remember { mutableStateOf("") }
-    var peso28 by remember { mutableStateOf("") }
-    var peso35 by remember { mutableStateOf("") }
+    //0.044, 0.197, 0.518, 1.043, 1.678, 2.409
+    var peso1 by remember { mutableStateOf("0.044") }
+    var peso7 by remember { mutableStateOf("0.197") }
+    var peso14 by remember { mutableStateOf("0.518") }
+    var peso21 by remember { mutableStateOf("1.043") }
+    var peso28 by remember { mutableStateOf("1.678") }
+    var peso35 by remember { mutableStateOf("2.409") }
     var peso42 by remember { mutableStateOf<String?>(null) }
 
-    var dia by remember { mutableStateOf("") }
+    var dia by remember { mutableStateOf("42") }
 
     Column(
         modifier = Modifier
@@ -217,7 +218,8 @@ fun PreverPesoScreen() {
                 val dias = doubleArrayOf(1.0, 7.0, 14.0, 21.0, 28.0, 35.0)
                 val pesos = doubleArrayOf(p1, p7, p14, p21, p28, p35)
 
-                //0.044, 0.197, 0.518, 1.043, 1.678, 2.409
+                //0.044, 0.197, 0.518, 1.043, 1.678, 2.409 (3.112) (3.141 calculado)
+                //0.037, 0.187, 0.490, 1.005, 1.620. 2.320 (3.0) (2.933 calculado)
 
                 val parametros = ajustarGompertz(dias, pesos)
 
